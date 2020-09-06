@@ -37,6 +37,26 @@ public class ShopDbGenerator {
 
     private void addOrders() {
         User user1 = db.getUsers().stream().filter(x -> x.getLogin().equals("user1")).findFirst().get();
+        User user2 = db.getUsers().stream().filter(x -> x.getLogin().equals("user2")).findFirst().get();
+        User user3 = db.getUsers().stream().filter(x -> x.getLogin().equals("user3")).findFirst().get();
+        Productik banana = getProduct("Banana");
+        Productik carrot = getProduct("Carrot");
+        Productik potato = getProduct("Potato");
+        Productik soap = getProduct("Soap");
+        Productik apple = getProduct("Apple");
+        Order order1 = db.addOrder(user1, banana);
+        order1.addProduct(carrot);
+        order1.addProduct(apple);
+        Order order2 = db.addOrder(user2, banana);
+        order2.addProduct(carrot);
+        Order order3 = db.addOrder(user3, banana);
+        order3.addProduct(potato);
+        db.addOrder(user1, potato);
+        db.addOrder(user2, potato);
+        db.addOrder(user1, soap);
+        for (Order order : db.getOrders()){
+            order.setState(OrderState.DELIVERED);
+        }
     }
 
     private void addUsers() {

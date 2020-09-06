@@ -5,6 +5,7 @@ import ShopApp.ProductTools.Productik;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ShopImpl extends InputProcessor {
 
@@ -56,10 +57,28 @@ public class ShopImpl extends InputProcessor {
         return db.getProducts();
     }
 
+    public Set<Order> getOrders(){
+        return db.getOrders();
+    }
+
+    public Set<Order> getOrders(User user){
+        return db.getOrders().stream().filter(x -> x.getUser() == user).collect(Collectors.toSet());
+    }
+
+    public Order getOrder(int orderId){
+        return db.getOrders().stream().filter(x -> x.getId() == orderId).findFirst().get();
+    }
+
     public Map<UserProduct, Integer> getRatings(){ return db.getRatings();}
 
     public void addRating(User user, Productik product, Integer rating){
         db.addRating(user, product, rating);
+    }
+
+    public void removeOrder(int orderId){
+        Set<Order> orders = db.getOrders();
+        if (orders.stream().anyMatch(x -> x.getId() == orderId))
+            orders.remove(orders.stream().filter(x -> x.getId() == orderId).findAny());
     }
 
 }

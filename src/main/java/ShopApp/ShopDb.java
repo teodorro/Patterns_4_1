@@ -31,6 +31,12 @@ public class ShopDb {
             this.ratings.remove(new UserProduct(user, product));
     }
 
+    public Order addOrder(User user, Productik product){
+        Order order = new Order(user, product);
+        orders.add(order);
+        return order;
+    }
+
     public Set<User> getUsers() {
         return users;
     }

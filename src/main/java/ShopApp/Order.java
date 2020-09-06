@@ -2,10 +2,15 @@ package ShopApp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import ShopApp.ProductTools.Productik;
 
-public class Order {
+public class Order implements Comparable<Order>{
+    private int id;
     private List<Productik> products = new ArrayList<>();
     private User user;
     private OrderState state;
@@ -13,6 +18,7 @@ public class Order {
     private LocalDateTime timeCreated;
 
     public Order(User user, Productik product) {
+        this.id = IdCreator.getInstance().getNextId();
         this.user = user;
         this.state = OrderState.CONSTRUCTING;
         this.products.add(product);
@@ -26,8 +32,8 @@ public class Order {
         return this;
     }
 
-    public Productik[] getProducts(){
-        return (Productik[]) products.toArray();
+    public Set<Productik> getProducts(){
+        return products.stream().collect(Collectors.toSet());
     }
 
     public Order addProduct(Productik product){
@@ -49,5 +55,28 @@ public class Order {
 
     public LocalDateTime getLastTimeModified() {
         return lastTimeModified;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public OrderState getState() {
+        return state;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    @Override
+    public int compareTo(Order order) {
+        return Comparator.comparing(Order::getLastTimeModified)
+                .thenComparing(Order::getId)
+                .compare(this, order);
     }
 }

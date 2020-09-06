@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 
 public class ProductsFilter {
     private Supplier<Set<Productik>> getProducts;
-    private Double minPrice = 0d;
-    private Double maxPrice = 0d;
+    private Double minPrice = null;
+    private Double maxPrice = null;
     private Set<String> producers = new HashSet<>();
     private Set<String> keywords = new HashSet<>();
     private boolean mostPopular;
@@ -27,9 +27,9 @@ public class ProductsFilter {
 
     public TreeSet<Productik> filter(){
         Stream<Productik> filteredStream = getProducts.get().stream();
-        if (minPrice > 0)
+        if (minPrice != null)
             filteredStream = filteredStream.filter(x -> x.getPrice() >= minPrice);
-        if (maxPrice > 0)
+        if (maxPrice != null)
             filteredStream = filteredStream.filter(x -> x.getPrice() <= maxPrice);
         if (producers.size() > 0)
             filteredStream = filteredStream.filter(x -> producers.contains(x.getProducer()));
@@ -52,8 +52,8 @@ public class ProductsFilter {
     }
 
     public void clear(){
-        minPrice = 0d;
-        maxPrice = 0d;
+        minPrice = null;
+        maxPrice = null;
         producers.clear();
         keywords.clear();
         mostPopular = false;
@@ -88,9 +88,7 @@ public class ProductsFilter {
         return minPrice;
     }
 
-    public Double getMaxPrice() {
-        return maxPrice;
-    }
+    public Double getMaxPrice() { return maxPrice; }
 
     public Set<String> getProducers() {
         return producers;
