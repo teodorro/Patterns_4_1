@@ -3,6 +3,8 @@ package ShopApp.ProductTools;
 import ShopApp.ProductTools.Comparators.ProductIdComparator;
 import ShopApp.ProductTools.Comparators.ProductPopularityComparator;
 import ShopApp.ProductTools.Comparators.ProductRatingComparator;
+import ShopApp.ProductTools.Comparators.ProductRecommendComparator;
+import ShopApp.User;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -82,6 +84,16 @@ public class ProductsFilter {
         if (highestRating)
             mostPopular = false;
         return this;
+    }
+
+    public TreeSet<Productik> getRecommended(User user, Set<User> allUsers){
+        Set<User> otherUsers = allUsers.stream().filter(x -> x != user).collect(Collectors.toSet());
+        Set<Productik> marked = user.getRatings().keySet();
+        Set<Productik> notMarked = allUsers.stream().flatMap(x -> x.getRatings().keySet().stream()).filter(x -> !marked.contains(x)).collect(Collectors.toSet());
+//        Set<Productik> notMarked = getProducts.get().stream().filter(x -> !marked.contains(x)).collect(Collectors.toSet());
+        TreeSet<Productik> res = new TreeSet<>(new ProductRecommendComparator().prepare(user, otherUsers));
+        res.addAll(notMarked);
+        return res;
     }
 
     public Double getMinPrice() {

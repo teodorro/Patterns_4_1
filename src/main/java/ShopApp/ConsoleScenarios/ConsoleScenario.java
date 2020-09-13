@@ -1,18 +1,7 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.InputProcessor;
-import ShopApp.Order;
-import ShopApp.ProductTools.Comparators.ProductIdComparator;
-import ShopApp.ProductTools.Productik;
-import ShopApp.ProductTools.ProductsFilter;
 import ShopApp.ShopImpl;
 import ShopApp.User;
-
-import java.text.DecimalFormat;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 public class ConsoleScenario extends BaseConsoleScenario {
 
@@ -24,8 +13,8 @@ public class ConsoleScenario extends BaseConsoleScenario {
     }
 
     public void start() {
-        if (!(new LoginScenario(user, shop).loginOrRegister()))
-            return;
+//        if (!(new LoginScenario(user, shop).loginOrRegister()))
+//            return;
         user = shop.getUser("user1", "123");
         showProductsOrders();
     }
@@ -38,10 +27,10 @@ public class ConsoleScenario extends BaseConsoleScenario {
                     + "0. Выход", 0, 2);
             switch (answer) {
                 case 1:
-                    (new ProductsScenario(user, shop)).showProductsScenario();
+                    (new ChooseProductsScenario(user, shop)).showProductsScenario();
                     break;
                 case 2:
-                    (new OrdersScenario(user, shop)).showOrdersScenario();
+                    (new ManagingOrdersScenario(user, shop)).showOrdersScenario();
                     break;
                 case 0:
                     return;

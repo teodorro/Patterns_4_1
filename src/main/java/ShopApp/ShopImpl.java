@@ -69,9 +69,9 @@ public class ShopImpl extends InputProcessor {
         return db.getOrders().stream().filter(x -> x.getId() == orderId).findFirst().get();
     }
 
-    public Map<UserProduct, Integer> getRatings(){ return db.getRatings();}
+    public Map<UserProduct, Double> getRatings(){ return db.getRatings();}
 
-    public void addRating(User user, Productik product, Integer rating){
+    public void addRating(User user, Productik product, Double rating){
         db.addRating(user, product, rating);
     }
 
@@ -81,4 +81,7 @@ public class ShopImpl extends InputProcessor {
             orders.remove(orders.stream().filter(x -> x.getId() == orderId).findAny());
     }
 
+    public Set<User> getUsers(){
+        return db.getUsers();
+    }
 }

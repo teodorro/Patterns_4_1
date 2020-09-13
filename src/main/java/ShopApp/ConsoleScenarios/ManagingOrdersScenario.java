@@ -10,11 +10,11 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class OrdersScenario extends BaseConsoleScenario{
+public class ManagingOrdersScenario extends BaseConsoleScenario{
     private User user;
     private ShopImpl shop;
 
-    public OrdersScenario(User user, ShopImpl shop) {
+    public ManagingOrdersScenario(User user, ShopImpl shop) {
         this.user = user;
         this.shop = shop;
     }
@@ -22,11 +22,11 @@ public class OrdersScenario extends BaseConsoleScenario{
     public void showOrdersScenario() {
         while (true) {
             int answer = getAnswer("Выберите желаемое действие:\n"
-                    + "1. Посмотреть заказы\n"
-                    + "2. Отмена заказа\n"
-                    + "3. Возврат заказа\n"
-                    + "4. Повторение заказа\n"
-                    + "5. Посмотреть содержимое заказа\n"
+                    + "1. Посмотреть прошлые заказы\n"
+                    + "2. Посмотреть содержимое заказа\n"
+                    + "3. Отмена заказа\n"
+                    + "4. Возврат заказа\n"
+                    + "5. Повторение заказа\n"
                     + "0. Выход", 0, 5);
             switch (answer) {
                 case 1:
@@ -34,25 +34,25 @@ public class OrdersScenario extends BaseConsoleScenario{
                     pressEnter();
                     break;
                 case 2:
-                    removeOrder(getAnswer("Введите id заказа:", 0, null));
-                    showOrders();
-                    pressEnter();
-                    break;
-                case 3:
-                    returnOrder(getAnswer("Введите id заказа:", 0, null));
-                    showOrders();
-                    pressEnter();
-                    break;
-                case 4:
-                    repeatOrder(getAnswer("Введите id заказа:", 0, null));
-                    showOrders();
-                    pressEnter();
-                    break;
-                case 5:
                     int orderId = getAnswer("Введите id заказа:", 0, null);
                     TreeSet<Productik> products = new TreeSet<>(new ProductIdComparator());
                     products.addAll(shop.getOrder(orderId).getProducts());
                     printProducts(products);
+                    break;
+                case 3:
+                    removeOrder(getAnswer("Введите id заказа:", 0, null));
+                    showOrders();
+                    pressEnter();
+                    break;
+                case 4:
+                    returnOrder(getAnswer("Введите id заказа:", 0, null));
+                    showOrders();
+                    pressEnter();
+                    break;
+                case 5:
+                    repeatOrder(getAnswer("Введите id заказа:", 0, null));
+                    showOrders();
+                    pressEnter();
                     break;
                 case 0:
                     return;

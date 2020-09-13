@@ -10,7 +10,7 @@ public class ShopDb {
     private Set<User> users = new HashSet<>();
     private Set<Productik> products = new HashSet<>();
     private Set<Order> orders = new HashSet<>();
-    private Map<UserProduct, Integer> ratings = new HashMap<>();
+    private Map<UserProduct, Double> ratings = new HashMap<>();
 
     public void addUser(User user) {
         users.add(user);
@@ -24,15 +24,15 @@ public class ShopDb {
         this.products.addAll(products);
     }
 
-    public void addRating(User user, Productik product, Integer rating) {
+    public void addRating(User user, Productik product, Double rating) {
         if (rating != null)
             this.ratings.put(new UserProduct(user, product), rating);
         else
             this.ratings.remove(new UserProduct(user, product));
     }
 
-    public Order addOrder(User user, Productik product){
-        Order order = new Order(user, product);
+    public Order addOrder(User user, Productik product, Double quantity){
+        Order order = new Order(user, product, quantity);
         orders.add(order);
         return order;
     }
@@ -49,7 +49,7 @@ public class ShopDb {
         return orders;
     }
 
-    public Map<UserProduct, Integer> getRatings() {
+    public Map<UserProduct, Double> getRatings() {
         return ratings;
     }
 
@@ -58,7 +58,7 @@ public class ShopDb {
         int count = filtered.size();
         if (count == 0)
             return null;
-        double sum = filtered.stream().map(y -> getRatings().get(y)).reduce(0, (p, q) -> p + q);
+        double sum = filtered.stream().map(y -> getRatings().get(y)).reduce(0d, (p, q) -> p + q);
         return sum / count;
     }
 }

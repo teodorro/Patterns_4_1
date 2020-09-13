@@ -3,6 +3,9 @@ package ShopApp;
 import ShopApp.ProductTools.ProductBuilder;
 import ShopApp.ProductTools.Productik;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class ShopDbGenerator {
     private ShopDb db;
 
@@ -24,11 +27,11 @@ public class ShopDbGenerator {
         Productik carrot = getProduct("Carrot");
         Productik potato = getProduct("Potato");
         Productik soap = getProduct("Soap");
-        db.addRating(user1, banana, 4);
-        db.addRating(user2, banana, 5);
-        db.addRating(user1, carrot, 5);
-        db.addRating(user2, potato, 4);
-        db.addRating(user1, soap, 3);
+        db.addRating(user1, banana, 4d);
+        db.addRating(user2, banana, 5d);
+        db.addRating(user1, carrot, 5d);
+        db.addRating(user2, potato, 4d);
+        db.addRating(user1, soap, 3d);
     }
 
     private Productik getProduct(String name){
@@ -60,9 +63,25 @@ public class ShopDbGenerator {
     }
 
     private void addUsers() {
-        db.addUser(new User("user1", "123", "alex"));
-        db.addUser(new User("user2", "123", "tom"));
-        db.addUser(new User("user3", "123", "matt"));
+        User user1 = new User("user1", "123", "alex");
+        db.addUser(user1);
+        user1.setRatingGetter(() -> getUsersRatings(user1));
+//        user1.setRatingGetter(() -> db.getRatings()
+//                .keySet().stream().filter(x -> x.getUser() == user1)
+//                .map(up -> up.getProduct()));
+        User user2 = new User("user2", "123", "tom");
+        db.addUser(user2);
+        user2.setRatingGetter(() -> getUsersRatings(user2));
+        User user3 = new User("user3", "123", "matt");
+        db.addUser(user3);
+        user3.setRatingGetter(() -> getUsersRatings(user3));
+    }
+
+    private Map<Productik, Double> getUsersRatings(User user) {
+        return db.getRatings().keySet().stream().filter(x -> x.getUser() == user)
+                .collect(Collectors.toMap(
+                        UserProduct::getProduct,
+                        x -> db.getRatings().get(x)));
     }
 
     private void addProducts() {

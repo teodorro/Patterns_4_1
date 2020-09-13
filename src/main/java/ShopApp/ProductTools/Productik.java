@@ -52,7 +52,7 @@ public class Productik {
     }
 
     public Double getRating() { return ratingGetter.apply(this); }
-    public Double getRatingZero() { return ratingGetter.apply(this) == null ? 0 : ratingGetter.apply(this); }
+    public Double getRatingZeroFromNull() { return ratingGetter.apply(this) == null ? 0 : ratingGetter.apply(this); }
 
     public void setProducer(String producer) {
         this.producer = producer;
@@ -80,4 +80,9 @@ public class Productik {
 //        }
 //    }
 
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
