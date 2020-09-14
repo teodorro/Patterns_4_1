@@ -1,10 +1,10 @@
-package ShopApp.ProductTools;
+package ShopApp.Model.ProductTools;
 
-import ShopApp.ProductTools.Comparators.ProductIdComparator;
-import ShopApp.ProductTools.Comparators.ProductPopularityComparator;
-import ShopApp.ProductTools.Comparators.ProductRatingComparator;
-import ShopApp.ProductTools.Comparators.ProductRecommendComparator;
-import ShopApp.User;
+import ShopApp.Model.ProductTools.Comparators.ProductIdComparator;
+import ShopApp.Model.ProductTools.Comparators.ProductPopularityComparator;
+import ShopApp.Model.ProductTools.Comparators.ProductRatingComparator;
+import ShopApp.Model.ProductTools.Comparators.ProductRecommendComparator;
+import ShopApp.Model.User;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,9 +21,11 @@ public class ProductsFilter {
     private Set<String> keywords = new HashSet<>();
     private boolean mostPopular;
     private boolean highestRating;
+    private User user;
 
 
-    public ProductsFilter(Supplier<Set<Productik>> getProducts) {
+    public ProductsFilter(Supplier<Set<Productik>> getProducts, User user) {
+        this.user = user;
         this.getProducts = getProducts;
     }
 
@@ -39,16 +41,16 @@ public class ProductsFilter {
             filteredStream = filteredStream.filter(x -> x.getKeywords().containsAll(keywords));
         Set<Productik> filtered = filteredStream.collect(Collectors.toSet());
         if (highestRating) {
-            TreeSet sorted = new TreeSet<Productik>(new ProductRatingComparator());
+            TreeSet sorted = new TreeSet<>(new ProductRatingComparator(user));
             sorted.addAll(filtered);
             return sorted;
         }
         if (mostPopular) {
-            TreeSet sorted = new TreeSet<Productik>(new ProductPopularityComparator());
+            TreeSet sorted = new TreeSet<>(new ProductPopularityComparator());
             sorted.addAll(filtered);
             return sorted;
         }
-        TreeSet sorted = new TreeSet<Productik>(new ProductIdComparator());
+        TreeSet sorted = new TreeSet<>(new ProductIdComparator());
         sorted.addAll(filtered);
         return sorted;
     }
@@ -90,7 +92,6 @@ public class ProductsFilter {
         Set<User> otherUsers = allUsers.stream().filter(x -> x != user).collect(Collectors.toSet());
         Set<Productik> marked = user.getRatings().keySet();
         Set<Productik> notMarked = allUsers.stream().flatMap(x -> x.getRatings().keySet().stream()).filter(x -> !marked.contains(x)).collect(Collectors.toSet());
-//        Set<Productik> notMarked = getProducts.get().stream().filter(x -> !marked.contains(x)).collect(Collectors.toSet());
         TreeSet<Productik> res = new TreeSet<>(new ProductRecommendComparator().prepare(user, otherUsers));
         res.addAll(notMarked);
         return res;

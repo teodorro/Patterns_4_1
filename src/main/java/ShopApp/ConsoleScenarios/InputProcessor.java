@@ -1,4 +1,4 @@
-package ShopApp;
+package ShopApp.ConsoleScenarios;
 
 import java.util.Scanner;
 
@@ -66,6 +66,23 @@ public class InputProcessor {
                     continue;
                 }
                 return val;
+            } catch (Exception e) {
+                System.out.println("Ошибка при вводе. Попробуйте еще раз");
+                continue;
+            }
+        }
+    }
+
+    protected boolean getAnswerYesNo(String question){
+        while (true) {
+            try {
+                System.out.println(question);
+                String val = scanner.nextLine();
+                if ("да".equals(val))
+                    return true;
+                if ("нет".equals(val))
+                    return false;
+                System.out.println("Значение вне допустимого диапазона");
             } catch (Exception e) {
                 System.out.println("Ошибка при вводе. Попробуйте еще раз");
                 continue;

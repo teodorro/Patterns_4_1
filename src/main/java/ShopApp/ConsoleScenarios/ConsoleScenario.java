@@ -1,15 +1,23 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.ShopImpl;
-import ShopApp.User;
+import ShopApp.Db.DtoConverter;
+import ShopApp.Db.ShopDbTest;
+import ShopApp.Model.IShop;
+import ShopApp.Model.IShopSetData;
+import ShopApp.Model.ProductTools.ProductBuilder;
+import ShopApp.Model.ShopImpl2;
+import ShopApp.Model.User;
 
 public class ConsoleScenario extends BaseConsoleScenario {
 
-    private ShopImpl shop;
+    private IShop shop;
     private User user;
 
-    public ConsoleScenario(ShopImpl shop) {
-        this.shop = shop;
+    public ConsoleScenario() {
+        ShopDbTest db = new ShopDbTest().Initialize();
+        shop = new ShopImpl2();
+        ProductBuilder.setShop(shop);
+        new DtoConverter().convert(db, (IShopSetData)shop);
     }
 
     public void start() {

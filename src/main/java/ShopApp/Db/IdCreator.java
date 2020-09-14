@@ -1,4 +1,4 @@
-package ShopApp;
+package ShopApp.Db;
 
 public class IdCreator {
     private static IdCreator instance;

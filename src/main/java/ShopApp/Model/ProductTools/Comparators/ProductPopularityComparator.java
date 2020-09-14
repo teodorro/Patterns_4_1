@@ -1,6 +1,6 @@
-package ShopApp.ProductTools.Comparators;
+package ShopApp.Model.ProductTools.Comparators;
 
-import ShopApp.ProductTools.Productik;
+import ShopApp.Model.ProductTools.*;
 
 import java.util.Comparator;
 

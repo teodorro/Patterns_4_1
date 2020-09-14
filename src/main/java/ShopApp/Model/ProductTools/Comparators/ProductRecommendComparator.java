@@ -1,7 +1,7 @@
-package ShopApp.ProductTools.Comparators;
+package ShopApp.Model.ProductTools.Comparators;
 
-import ShopApp.ProductTools.Productik;
-import ShopApp.User;
+import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.User;
 
 import java.util.*;
 import java.util.stream.Collectors;

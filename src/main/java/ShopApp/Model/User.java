@@ -1,16 +1,14 @@
-package ShopApp;
-
-import ShopApp.ProductTools.Productik;
+package ShopApp.Model;
 
 import java.util.*;
 import java.util.function.Supplier;
+import ShopApp.Model.ProductTools.*;
 
 public class User {
-    private int id;
     private final String login;
     private String password;
     private String name;
-//    private Map<Productik, Double> ratings = new HashMap<>();
+
     private Supplier<Map<Productik, Double>> ratingGetter;
     private List<Order> orders = new ArrayList<>();
     private List<Order> returnedOrders = new ArrayList<>();
@@ -20,7 +18,6 @@ public class User {
         this.login = login;
         this.password = password;
         this.name = name;
-        id = IdCreator.getInstance().getNextId();
     }
 
     public String getLogin() {
@@ -35,9 +32,6 @@ public class User {
         return name;
     }
 
-//    public Map<Productik, Double> getRatings() {
-//        return ratings;
-//    }
     public Map<Productik, Double> getRatings() {
     return ratingGetter.get();
 }
@@ -50,9 +44,6 @@ public class User {
         return returnedOrders;
     }
 
-//    public void setRatings(Map<Productik, Double> ratings) {
-//        this.ratings = ratings;
-//    }
     public void setRatingGetter(Supplier<Map<Productik, Double>> ratingGetter){
         this.ratingGetter = ratingGetter;
     }

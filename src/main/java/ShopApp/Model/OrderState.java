@@ -1,4 +1,4 @@
-package ShopApp;
+package ShopApp.Model;
 
 public enum OrderState {
     CONSTRUCTING,

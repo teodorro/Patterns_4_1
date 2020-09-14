@@ -1,9 +1,10 @@
-package ShopApp.ProductTools;
+package ShopApp.Model.ProductTools;
+
+import ShopApp.Model.IShop;
+import ShopApp.Model.ProductTools.*;
 
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class ProductBuilder {
     private String name;
@@ -11,27 +12,29 @@ public class ProductBuilder {
     private String producer;
     private Set<String> keywords = new TreeSet<>();
 
-
     private static ProductBuilder instance;
     public static ProductBuilder getInstance(){
+        if (shop == null)
+            throw new NullPointerException("Initialize shop first");
         if (instance == null)
             instance = new ProductBuilder();
         return instance;
     }
 
+    private static IShop shop;
+    public static void setShop(IShop shopchik){
+        shop = shopchik;
+    }
+
     private ProductBuilder(){}
 
-    private Function<Productik, Double> ratingGetter;
-    public void setRatingGetter(Function<Productik, Double> ratingGetter){
-        this.ratingGetter = ratingGetter;
-    }
 
     public Productik build(){
         if (name == null)
             throw new IllegalStateException("product name was not initialized");
         if (price == 0)
             throw new IllegalStateException("price equals zero");
-        Productik product = new Productik(name, price, ratingGetter);
+        Productik product = new Productik(name, price, x -> shop.getRating(x));
         product.setProducer(producer);
         product.getKeywords().addAll(keywords);
         clear();
@@ -52,6 +55,11 @@ public class ProductBuilder {
 
     public ProductBuilder addKeyword(String keyword){
         keywords.add(keyword);
+        return this;
+    }
+
+    public ProductBuilder addKeywords(Set<String> keywords){
+        keywords.addAll(keywords);
         return this;
     }
 

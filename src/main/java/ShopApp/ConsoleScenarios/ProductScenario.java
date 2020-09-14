@@ -1,12 +1,8 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.ProductTools.Productik;
-import ShopApp.ShopImpl;
-import ShopApp.User;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import ShopApp.Model.IShop;
+import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.User;
 
 public class ProductScenario extends BaseConsoleScenario {
     private final String NAME = "Name";
@@ -14,17 +10,18 @@ public class ProductScenario extends BaseConsoleScenario {
     private final String PRODUCER = "Producer";
     private final String RATING = "Rating";
     private final String KEYWORDS = "Keywords";
-    private ShopImpl shop;
+    private IShop shop;
     private User user;
     private Productik product;
 
-    public ProductScenario(User user, ShopImpl shop, Productik product) {
+    public ProductScenario(User user, IShop shop, Productik product) {
         this.user = user;
         this.shop = shop;
         this.product = product;
     }
+
     public void showScenario(){
-        showProductInfo();
+        showProductInfo(user);
         while (true) {
             int answer = getAnswer("Выберите желаемое действие:\n"
                     + "1. Добавить продукт в заказ\n"
@@ -34,11 +31,10 @@ public class ProductScenario extends BaseConsoleScenario {
             switch (answer) {
                 case 1:
                     Double quantity = getAnswer("Укажите количество продукта:", 0d, Double.MAX_VALUE);
-                    user.getCurrentOrder().addProduct(product);
+                    user.getCurrentOrder().setProduct(product, quantity);
                     System.out.println("Товар добавлен в заказ");
                     break;
                 case 2:
-                    product
                     break;
                 case 3:
                     break;
@@ -48,7 +44,7 @@ public class ProductScenario extends BaseConsoleScenario {
         }
     }
 
-    private void showProductInfo()
+    private void showProductInfo(User user)
     {
         String keywords = product.getKeywords() != null ? product.getKeywords().stream().reduce((x, y) -> x + ", " + y).get() : "";
         int maxNameLength = Math.max(NAME.length(), Math.max(PRICE.length(), Math.max(RATING.length(), Math.max(PRODUCER.length(), KEYWORDS.length()))));
@@ -56,7 +52,7 @@ public class ProductScenario extends BaseConsoleScenario {
         System.out.println(cellVal(maxNameLength, NAME) + cellVal(maxValueLength, product.getName())
             + "\n" + cellVal(maxNameLength, PRICE) + cellVal(maxValueLength, product.getPrice().toString())
             + "\n" + cellVal(maxNameLength, PRODUCER) + cellVal(maxValueLength, product.getProducer())
-            + "\n" + cellVal(maxNameLength, RATING) + cellVal(maxValueLength, product.getRating().toString())
+            + "\n" + cellVal(maxNameLength, RATING) + cellVal(maxValueLength, product.getRating(user).toString())
             + "\n" + cellVal(maxNameLength, KEYWORDS) + cellVal(maxValueLength, keywords) + "\n");
     }
 }

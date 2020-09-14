@@ -1,13 +1,13 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.ShopImpl;
-import ShopApp.User;
+import ShopApp.Model.*;
+import ShopApp.Model.User;
 
 public class LoginScenario extends BaseConsoleScenario {
     private User user;
-    private ShopImpl shop;
+    private IShop shop;
 
-    public LoginScenario(User user, ShopImpl shop) {
+    public LoginScenario(User user, IShop shop) {
         this.user = user;
         this.shop = shop;
     }
@@ -25,7 +25,7 @@ public class LoginScenario extends BaseConsoleScenario {
                         user = login();
                         break;
                     case 2:
-                        user = shop.registerUser();
+                        user = shop.registerUser("", "", "");
                         break;
                     default:
                         return false;

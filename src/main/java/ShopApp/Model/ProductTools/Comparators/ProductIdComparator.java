@@ -1,12 +1,12 @@
-package ShopApp.ProductTools.Comparators;
+package ShopApp.Model.ProductTools.Comparators;
 
-import ShopApp.ProductTools.Productik;
+import ShopApp.Model.ProductTools.*;
 
 import java.util.Comparator;
 
 public class ProductIdComparator implements Comparator<Productik> {
     @Override
     public int compare(Productik product1, Productik product2) {
-        return product1.getId() - product2.getId();
+        return product1.getName().compareTo(product2.getName());
     }
 }

@@ -1,10 +1,10 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.Order;
-import ShopApp.ProductTools.Comparators.ProductIdComparator;
-import ShopApp.ProductTools.Productik;
-import ShopApp.ShopImpl;
-import ShopApp.User;
+import ShopApp.Model.IShop;
+import ShopApp.Model.Order;
+import ShopApp.Model.ProductTools.Comparators.ProductIdComparator;
+import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.User;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -12,9 +12,9 @@ import java.util.TreeSet;
 
 public class ManagingOrdersScenario extends BaseConsoleScenario{
     private User user;
-    private ShopImpl shop;
+    private IShop shop;
 
-    public ManagingOrdersScenario(User user, ShopImpl shop) {
+    public ManagingOrdersScenario(User user, IShop shop) {
         this.user = user;
         this.shop = shop;
     }
@@ -37,7 +37,7 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
                     int orderId = getAnswer("Введите id заказа:", 0, null);
                     TreeSet<Productik> products = new TreeSet<>(new ProductIdComparator());
                     products.addAll(shop.getOrder(orderId).getProducts());
-                    printProducts(products);
+                    printProducts(products, user);
                     break;
                 case 3:
                     removeOrder(getAnswer("Введите id заказа:", 0, null));

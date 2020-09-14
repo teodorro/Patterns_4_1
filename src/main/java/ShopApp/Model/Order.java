@@ -1,10 +1,9 @@
-package ShopApp;
+package ShopApp.Model;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import ShopApp.ProductTools.Productik;
+import ShopApp.Model.ProductTools.*;
 
 public class Order implements Comparable<Order>{
     private int id;
@@ -14,8 +13,8 @@ public class Order implements Comparable<Order>{
     private LocalDateTime lastTimeModified;
     private LocalDateTime timeCreated;
 
-    public Order(User user, Productik product, Double quantity) {
-        this.id = IdCreator.getInstance().getNextId();
+    public Order(int id, User user, Productik product, Double quantity) {
+        this.id = id;
         this.user = user;
         this.state = OrderState.CONSTRUCTING;
         this.products.put(product, quantity);
@@ -33,21 +32,12 @@ public class Order implements Comparable<Order>{
         return products.keySet().stream().collect(Collectors.toSet());
     }
 
-    public Order addProduct(Productik product, double number){
+    public Order setProduct(Productik product, double number){
         if (state != OrderState.CONSTRUCTING)
-            throw new IllegalStateException("Добавление товара в заказ возможно только в режиме составления заказа");
-        products.add(product);
+            throw new IllegalStateException("Редактирование содержимого заказа возможно только на стадии составления заказа");
+        products.put(product, number);
         lastTimeModified = LocalDateTime.now();
         return this;
-    }
-
-    public void removeProduct(Productik product, double number){
-        if (state != OrderState.CONSTRUCTING)
-            throw new IllegalStateException("Удаление товара из заказа возможно только в режиме составления заказа");
-        if (products.contains(product)){
-            products.remove(product);
-            lastTimeModified = LocalDateTime.now();
-        }
     }
 
     public LocalDateTime getLastTimeModified() {
