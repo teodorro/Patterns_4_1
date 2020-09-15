@@ -3,6 +3,8 @@ package ShopApp.ConsoleScenarios;
 import ShopApp.Model.*;
 import ShopApp.Model.ProductTools.ProductsFilter;
 
+import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -125,11 +127,33 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
     }
 
     private void printAllKeywords() {
-//        Set<String> keywords = shop.getProducts().stream().flatMap(x -> x.getKeywords().stream()).collect(Collectors.toSet());
         Set<String> keywords = shop.getKeywords();
         System.out.println("== Keywords:");
         for (String keyword : keywords) {
             System.out.println(keyword);
+        }
+    }
+
+    protected void printProducts(TreeSet<Productik> products, User user) {
+        int maxLengthName = Math.max(NAME.length(), products.stream().map(x -> x.getName()).map(y -> y.length()).max(Comparator.naturalOrder()).get());
+        int maxLengthProducer = Math.max(PRODUCER.length(), products.stream().map(x -> x.getProducer()).map(y -> y != null ? y.length() : 0).max(Comparator.naturalOrder()).get());
+        int maxPrice = Math.max(PRICE.length(), products.stream().map(x -> x.getPrice()).max(Comparator.naturalOrder()).get().toString().length());
+
+        System.out.println(cellVal(maxLengthName, NAME)
+                + cellVal(maxPrice, PRICE)
+                + cellVal(maxLengthProducer, PRODUCER)
+                + cellVal(RATING.length(), RATING)
+        );
+        System.out.println("-".repeat(maxLengthName + maxPrice + maxLengthProducer + + RATING.length() + COLUMN_GAP * 3));
+        for (Productik product : products) {
+            Double rating = product.getRatingSetByUser(user);
+            if (rating == null)
+                rating = product.getAvgRating();
+            System.out.println(cellVal(maxLengthName, product.getName())
+                    + cellVal(maxPrice, product.getPrice().toString())
+                    + cellVal(maxLengthProducer, product.getProducer() == null ? "" : product.getProducer() )
+                    + cellVal(RATING.length(), rating == null ? "" : new DecimalFormat("0.00").format(rating))
+            );
         }
     }
 
