@@ -68,6 +68,7 @@ public class DtoConverter {
             for (Productik product : orderContent.keySet()){
                 order.setProduct(product, orderContent.get(product));
             }
+            order.setState(OrderState.values()[dto.getState()]);
             orders.add(order);
         }
         return orders;
@@ -94,7 +95,7 @@ public class DtoConverter {
         Set<UserDto> dtos = db.getUsers();
         Set<User> users = new HashSet<>();
         for (UserDto dto : dtos) {
-            User user = new User(dto.getLogin(), dto.getPassword(), dto.getName());
+            User user = UserBuilder.getInstance().setLogin(dto.getLogin()).setPassword(dto.getPassword()).setUsername(dto.getName()).build();
             users.add(user);
         }
         return users;

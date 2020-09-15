@@ -33,8 +33,10 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
                     + "7. Clear filter\n"
                     + "8. Show recommended products\n"
                     + "9. Show all keywords\n"
-                    + "10. Show current order content\n"
+                    + (user.getCurrentOrder().getProducts().size() > 0
+                    ? "10. Show current order content\n"
                     + "11. Next to order finalization\n"
+                    : "")
                     + "0. Back\n", 0, 11);
             switch (answer) {
                 case 1:
@@ -85,15 +87,22 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
                     pressEnter();
                     break;
                 case 10:
-                    printCurrentOrder();
-                    pressEnter();
+                    if (user.getCurrentOrder().getProducts().size() > 0)
+                    {
+                        printCurrentOrder();
+                        pressEnter();
+                    }
                     break;
                 case 11:
-                    printCurrentOrder();
-                    if (user.getCurrentOrder() == null) {
-                        if (getAnswerYesNo("Confirm ordering (yes/no)?")) {
-                            user.getCurrentOrder().setState(OrderState.PREPARING);
-                            return;
+                    if (user.getCurrentOrder().getProducts().size() > 0) {
+                        printCurrentOrder();
+                        if (user.getCurrentOrder() != null) {
+                            if (getAnswerYesNo("Confirm ordering (yes/no)?")) {
+                                user.getCurrentOrder().setState(OrderState.PREPARING);
+                                shop.addOrder(user.getCurrentOrder());
+                                user.setCurrentOrder(null);
+                                return;
+                            }
                         }
                     }
                     break;
@@ -111,6 +120,7 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
         }
         TreeSet<Productik> orderProducts = new TreeSet<>();
         orderProducts.addAll(order.getProducts());
+        System.out.println("== Current order content");
         this.printProducts(orderProducts, user);
     }
 

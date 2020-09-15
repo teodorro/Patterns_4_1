@@ -3,12 +3,12 @@ package ShopApp.ConsoleScenarios;
 import ShopApp.Model.*;
 import ShopApp.Model.ProductTools.Comparators.ProductIdComparator;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.text.DecimalFormat;
+import java.util.*;
 
 public class ManagingOrdersScenario extends BaseConsoleScenario{
+    private final String AMOUNT = "Amount";
+
     private User user;
     private ShopUser shop;
 
@@ -33,9 +33,10 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
                     break;
                 case 2:
                     int orderId = getAnswer("Write order id:", 0, null);
-                    TreeSet<Productik> products = new TreeSet<>(new ProductIdComparator());
-                    products.addAll(shop.getOrder(orderId).getProducts());
-                    printProducts(products, user);
+//                    TreeSet<Productik> products = new TreeSet<>(new ProductIdComparator());
+//                    products.addAll(shop.getOrder(orderId).getProducts());
+//                    printProducts(products, user);
+                    printOrder(shop.getOrder(orderId));
                     break;
                 case 3:
                     removeOrder(getAnswer("Write order id:", 0, null));
@@ -58,8 +59,32 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
         }
     }
 
-    private void returnOrder(int idOrder) {
-        Order order = shop.getOrder(idOrder);
+    private void printOrder(Order order) {
+        Map<Productik, Double> productAmounts = order.getProductAmounts();
+        Set<Productik> products = order.getProducts();
+        int maxLengthName = Math.max(NAME.length(), products.stream().map(x -> x.getName()).map(y -> y.length()).max(Comparator.naturalOrder()).get());
+        int maxLengthProducer = Math.max(PRODUCER.length(), products.stream().map(x -> x.getProducer()).map(y -> y != null ? y.length() : 0).max(Comparator.naturalOrder()).get());
+        int maxPrice = Math.max(PRICE.length(), products.stream().map(x -> x.getPrice()).max(Comparator.naturalOrder()).get().toString().length());
+
+        System.out.println(cellVal(maxLengthName, NAME)
+                + cellVal(maxLengthProducer, PRODUCER)
+                + cellVal(AMOUNT.length(), AMOUNT)
+                + cellVal(maxPrice, PRICE)
+        );
+        System.out.println("-".repeat(maxLengthName + maxPrice + maxLengthProducer + AMOUNT.length() + COLUMN_GAP * 3));
+        for (Productik product : products) {
+            Double amount = productAmounts.get(product);
+            System.out.println(cellVal(maxLengthName, product.getName())
+                    + cellVal(maxLengthProducer, product.getProducer() == null ? "" : product.getProducer() )
+                    + cellVal(AMOUNT.length(), new DecimalFormat("0.00").format(amount))
+                    + cellVal(maxPrice, String.valueOf(product.getPrice() * amount))
+            );
+        }
+        System.out.println("");
+    }
+
+    private void returnOrder(int id) {
+        Order order = shop.getOrder(id);
         if (order == null){
             System.out.println("No order with this id");
             return;
@@ -71,16 +96,26 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
         order.setState(OrderState.RETURNED);
     }
 
-    private void repeatOrder(int idOrder) {
-        Order order = shop.getOrder(idOrder);
+    private void repeatOrder(int id) {
+        Order order = shop.getOrder(id);
         if (order == null){
             System.out.println("No order with this id");
             return;
         }
-        shop.copy(idOrder);
+        Order order2 = shop.copy(id).setState(OrderState.PREPARING);
+        shop.getOrders().add(order2);
     }
 
     private void removeOrder(int id) {
+        Order order = shop.getOrder(id);
+        if (order == null){
+            System.out.println("No order with this id");
+            return;
+        }
+        if (order.getState() != OrderState.PREPARING && order.getState() != OrderState.CONSTRUCTING){
+            System.out.println("This order cannot be removed");
+            return;
+        }
         shop.removeOrder(id);
     }
 
@@ -88,7 +123,7 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
         printOrders(shop.getOrders(user));
     }
 
-    private void printOrders(List<Order> orders) {
+    private void printOrders(Set<Order> orders) {
         int maxLengthId = Math.max(ID.length(), orders.stream().map(x -> x.getId()).max(Comparator.naturalOrder()).get().toString().length());
         int maxLengthTime = Math.max(LAST_TIME_MODIFIED.length(), orders.stream().map(x -> x.getLastTimeModified()).max(Comparator.naturalOrder()).get().toString().length());
         int maxLengthState = Math.max(STATE.length(), orders.stream().map(x -> x.getState().toString()).map(y -> y.length()).max(Comparator.naturalOrder()).get());
@@ -104,5 +139,6 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
                     + cellVal(maxLengthState, order.getState().toString())
             );
         }
+        System.out.println("");
     }
 }

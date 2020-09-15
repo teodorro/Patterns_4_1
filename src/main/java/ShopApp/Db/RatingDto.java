@@ -22,4 +22,13 @@ public class RatingDto {
     public double getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "RatingDto{" +
+                "userId=" + userId +
+                ", productId=" + productId +
+                ", value=" + value +
+                '}';
+    }
 }

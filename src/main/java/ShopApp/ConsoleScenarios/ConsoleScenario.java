@@ -19,9 +19,12 @@ public class ConsoleScenario extends BaseConsoleScenario {
     }
 
     public void start() {
-//        if (!(new LoginScenario(user, shop).loginOrRegister()))
-//            return;
-        user = shop.getUser("user1", "123");
+        LoginScenario loginScenario = new LoginScenario(user, shop);
+        if (!(loginScenario.loginOrRegister()))
+            return;
+        user = loginScenario.getUser();
+//        user = shop.getUser("user1", "123");
+
         showProductsOrders();
     }
 

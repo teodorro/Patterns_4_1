@@ -44,4 +44,16 @@ public class OrderDto {
     public Map<Integer, Double> getProducts() {
         return products;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDto{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", state=" + state +
+                ", lastTimeModified=" + lastTimeModified +
+                ", timeCreated=" + timeCreated +
+                ", products=" + products +
+                '}';
+    }
 }

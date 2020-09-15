@@ -60,9 +60,15 @@ public class LoginScenario extends BaseConsoleScenario {
                 return null;
             String password = getAnswer("Write password:", true);
             User user = shop.getUser(login, password);
-            if (user == null)
+            if (user == null) {
+                System.out.println("Wrong password");
                 continue;
+            }
             return user;
         }
+    }
+
+    public User getUser() {
+        return user;
     }
 }

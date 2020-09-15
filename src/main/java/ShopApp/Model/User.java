@@ -1,5 +1,7 @@
 package ShopApp.Model;
 
+import ShopApp.Db.IdCreator;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -10,7 +12,7 @@ public class User {
     private String name;
 
     private Supplier<Map<Productik, Double>> ratingGetter;
-    private Supplier<List<Order>> orderGetter;
+    private Supplier<Set<Order>> orderGetter;
     private Consumer<Order> orderAdder;
     private Order currentOrder;
 
@@ -36,7 +38,7 @@ public class User {
     return ratingGetter.get();
 }
 
-    public List<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orderGetter.get();
     }
 
@@ -48,7 +50,7 @@ public class User {
         this.ratingGetter = ratingGetter;
     }
 
-    public void setOrderGetter(Supplier<List<Order>> orderGetter){
+    public void setOrderGetter(Supplier<Set<Order>> orderGetter){
         this.orderGetter = orderGetter;
     }
 
@@ -57,6 +59,8 @@ public class User {
     }
 
     public Order getCurrentOrder() {
+        if (currentOrder == null)
+            currentOrder = new Order(IdCreator.getInstance().getNextId(), this);
         return currentOrder;
     }
 

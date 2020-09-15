@@ -34,7 +34,7 @@ public class ProductBuilder {
             throw new IllegalStateException("product name was not initialized");
         if (price == 0)
             throw new IllegalStateException("price equals zero");
-        Productik product = new Productik(name, price, x -> shop.getRating(x));
+        Productik product = new Productik(name, price, x -> shop.getAvgRating(x) , x -> shop.getRating(x));
         product.setProducer(producer);
         product.getKeywords().addAll(keywords);
         clear();
@@ -59,7 +59,7 @@ public class ProductBuilder {
     }
 
     public ProductBuilder addKeywords(Set<String> keywords){
-        keywords.addAll(keywords);
+        this.keywords.addAll(keywords);
         return this;
     }
 

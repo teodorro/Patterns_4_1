@@ -34,11 +34,13 @@ public class BaseConsoleScenario extends InputProcessor {
         );
         System.out.println("-".repeat(maxLengthName + maxPrice + maxLengthProducer + + RATING.length() + COLUMN_GAP * 3));
         for (Productik product : products) {
-//            Object a = product.getRating(user);
+            Double rating = product.getRatingSetByUser(user);
+            if (rating == null)
+                rating = product.getAvgRating();
             System.out.println(cellVal(maxLengthName, product.getName())
                     + cellVal(maxPrice, product.getPrice().toString())
                     + cellVal(maxLengthProducer, product.getProducer() == null ? "" : product.getProducer() )
-                    + cellVal(RATING.length(), product.getRating(user) == null ? "" : new DecimalFormat("0.00").format(product.getRating(user)))
+                    + cellVal(RATING.length(), rating == null ? "" : new DecimalFormat("0.00").format(rating))
             );
         }
     }

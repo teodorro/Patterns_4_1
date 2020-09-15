@@ -55,10 +55,23 @@ public class ShopDbGenerator {
                     put(db.getProducts().stream().filter(x -> x.getName().equals("Apple")).findFirst().get().getId(), 2d);
                 }}));
         db.getOrders().add(new OrderDto(IdCreator.getInstance().getNextId(),
+                db.getUsers().stream().filter(x -> x.getLogin().equals("user1")).findFirst().get().getId(),
+                1, LocalDateTime.now(), LocalDateTime.now(),
+                new HashMap<Integer, Double>(){{
+                    put(db.getProducts().stream().filter(x -> x.getName().equals("Banana")).findFirst().get().getId(), 2d);
+                    put(db.getProducts().stream().filter(x -> x.getName().equals("Carrot")).findFirst().get().getId(), 2d);
+                }}));
+        db.getOrders().add(new OrderDto(IdCreator.getInstance().getNextId(),
+                db.getUsers().stream().filter(x -> x.getLogin().equals("user1")).findFirst().get().getId(),
+                3, LocalDateTime.now(), LocalDateTime.now(),
+                new HashMap<Integer, Double>(){{
+                    put(db.getProducts().stream().filter(x -> x.getName().equals("Soap")).findFirst().get().getId(), 2d);
+                }}));
+        db.getOrders().add(new OrderDto(IdCreator.getInstance().getNextId(),
                 db.getUsers().stream().filter(x -> x.getLogin().equals("user2")).findFirst().get().getId(),
                 1, LocalDateTime.now(), LocalDateTime.now(),
                 new HashMap<Integer, Double>(){{
-                    put(db.getProducts().stream().filter(x -> x.getName().equals("Carrot")).findFirst().get().getId(), 2d);
+                    put(db.getProducts().stream().filter(x -> x.getName().equals("Potato")).findFirst().get().getId(), 2d);
                     put(db.getProducts().stream().filter(x -> x.getName().equals("Banana")).findFirst().get().getId(), 2d);
                 }}));
         db.getOrders().add(new OrderDto(IdCreator.getInstance().getNextId(),
@@ -91,6 +104,10 @@ public class ShopDbGenerator {
                 db.getUsers().stream().filter(x -> x.getLogin().equals("user1")).findFirst().get().getId(),
                 db.getProducts().stream().filter(x -> x.getName().equals("Soap")).findFirst().get().getId(),
                 3d));
+        db.getRatings().add(new RatingDto(
+                db.getUsers().stream().filter(x -> x.getLogin().equals("user3")).findFirst().get().getId(),
+                db.getProducts().stream().filter(x -> x.getName().equals("Potato")).findFirst().get().getId(),
+                3d));
     }
 
     private void addUsers() {
@@ -100,6 +117,8 @@ public class ShopDbGenerator {
                 "user2", "123", "tom"));
         db.getUsers().add(new UserDto(IdCreator.getInstance().getNextId(),
                 "user3", "123", "matt"));
+        db.getUsers().add(new UserDto(IdCreator.getInstance().getNextId(),
+                "user4", "123", "peter"));
     }
 
     private void addProducts() {

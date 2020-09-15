@@ -18,4 +18,12 @@ public class KeywordDto {
     public Set<Integer> getProductsId() {
         return productsId;
     }
+
+    @Override
+    public String toString() {
+        return "KeywordDto{" +
+                "name='" + name + '\'' +
+                ", productsId=" + productsId +
+                '}';
+    }
 }

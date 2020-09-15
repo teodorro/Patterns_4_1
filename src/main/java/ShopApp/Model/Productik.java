@@ -1,27 +1,26 @@
 package ShopApp.Model;
 
-import ShopApp.Model.User;
-import ShopApp.Model.UserProduct;
-
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
 // name "Product" is already booked by Java :(
-public class Productik {
+public class Productik implements Comparable<Productik>{
 
     private String name;
     private double price;
     private String producer;
     private Set<String> keywords = new TreeSet<>();
     private int numberSells = 0;
-    private Function<UserProduct, Double> ratingGetter;
+    private Function<Productik, Double> ratingAvgGetter;
+    private Function<UserProduct, Double> ratingSetByUserGetter;
 
 
-    public Productik(String name, double price, Function<UserProduct, Double> ratingGetter) {
+    public Productik(String name, double price, Function<Productik, Double> ratingAvgGetter, Function<UserProduct, Double> ratingSetByUserGetter) {
         this.name = name;
         this.price = price;
-        this.ratingGetter = ratingGetter;
+        this.ratingAvgGetter = ratingAvgGetter;
+        this.ratingSetByUserGetter = ratingSetByUserGetter;
     }
 
     public String getName() {
@@ -30,6 +29,10 @@ public class Productik {
 
     public Set<String> getKeywords() {
         return keywords;
+    }
+
+    public void setKeywords(Set<String> keywords){
+        this.keywords = keywords;
     }
 
     public Double getPrice() {
@@ -44,14 +47,18 @@ public class Productik {
         return numberSells;
     }
 
-    public Double getRating(User user) {
-        return ratingGetter.apply(new UserProduct(user, this));
+    public Double getAvgRating() {
+        return ratingAvgGetter.apply(this);
+    }
+
+    public Double getRatingSetByUser(User user) {
+        return ratingSetByUserGetter.apply(new UserProduct(user, this));
     }
 
     public Double getRatingZeroFromNull2(User user) {
-        return ratingGetter.apply(new UserProduct(user, this)) == null
+        return ratingSetByUserGetter.apply(new UserProduct(user, this)) == null
                 ? 0d
-                : ratingGetter.apply(new UserProduct(user, this));
+                : ratingSetByUserGetter.apply(new UserProduct(user, this));
     }
 
     public void setProducer(String producer) {
@@ -66,5 +73,10 @@ public class Productik {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Productik productik) {
+        return this.name.compareTo(productik.name);
     }
 }

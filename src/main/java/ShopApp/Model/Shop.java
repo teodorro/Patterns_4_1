@@ -67,10 +67,12 @@ public class Shop implements ShopUser, ShopSetData {
     }
 
     @Override
-    public List<Order> getOrders(User user) {
+    public Set<Order> getOrders(User user) {
         return orders.stream().anyMatch(x -> x.getUser() == user)
-                ? orders.stream().filter(x -> x.getUser() == user).collect(Collectors.toList())
-                : new ArrayList<>();
+                ? orders.stream().filter(x -> x.getUser() == user)
+                    .collect(Collectors.toSet())
+//                    .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.naturalOrder())))
+                : new TreeSet<>();
     }
 
     @Override
@@ -93,7 +95,7 @@ public class Shop implements ShopUser, ShopSetData {
     }
 
     @Override
-    public void setRating(UserProduct userProduct, Double rating){
+    public void setRating(UserProduct userProduct, Double rating) {
         if (rating != null)
             ratings.put(userProduct, rating);
         else
@@ -115,9 +117,24 @@ public class Shop implements ShopUser, ShopSetData {
     }
 
     @Override
+    public Double getAvgRating(Productik product) {
+        return ratings.keySet().stream().filter(x -> x.getProduct() == product).count() > 0
+                ? ratings.keySet().stream().filter(x -> x.getProduct() == product).map(y -> ratings.get(y)).reduce((x, y) -> x + y).get()
+                / ratings.keySet().stream().filter(x -> x.getProduct() == product).count()
+                : null;
+    }
+
+//    @Override
+//    public Double getRatingSetByUser(UserProduct userProduct) {
+//        return ratings.keySet().stream().anyMatch(x -> x.equals(userProduct))
+//                ? ratings.get(ratings.keySet().stream().filter(x -> x.equals(userProduct)).findFirst().get())
+//                : null;
+//    }
+
+    @Override
     public Productik getProduct(String productName) {
         return products.stream().anyMatch(x -> x.getName().equals(productName))
-                ? products.stream().filter(x -> x.getName() == productName).findFirst().get()
+                ? products.stream().filter(x -> x.getName().equals(productName)).findFirst().get()
                 : null;
     }
 
@@ -132,7 +149,7 @@ public class Shop implements ShopUser, ShopSetData {
 
     @Override
     public User registerUser(String login, String password, String username) {
-        if (users.stream().noneMatch(x -> x.getLogin().equals(login)))
+        if (users.stream().anyMatch(x -> x.getLogin().equals(login)))
             throw new IllegalArgumentException("Login already exists");
         User user = UserBuilder.getInstance().setLogin(login).setPassword(password).setUsername(username).build();
         users.add(user);
@@ -154,15 +171,15 @@ public class Shop implements ShopUser, ShopSetData {
             return null;
         Order orderOriginal = orders.stream().filter(x -> x.getId() == id).findFirst().get();
         Order order = new Order(IdCreator.getInstance().getNextId(), orderOriginal.getUser());
-        orders.add(order);
+        for (Productik product : orderOriginal.getProducts()){
+            order.setProduct(product, orderOriginal.getProductAmounts().get(product));
+        }
         return order;
     }
 
     @Override
-    public Order addOrder(User user) {
-        Order order = new Order(IdCreator.getInstance().getNextId(), user);
+    public void addOrder(Order order) {
         orders.add(order);
-        return order;
     }
 
 

@@ -12,14 +12,6 @@ public class Order implements Comparable<Order>{
     private LocalDateTime lastTimeModified;
     private LocalDateTime timeCreated;
 
-    public Order(int id, User user, Productik product, Double quantity) {
-        this.id = id;
-        this.user = user;
-        this.state = OrderState.CONSTRUCTING;
-        this.products.put(product, quantity);
-        lastTimeModified = LocalDateTime.now();
-        timeCreated = LocalDateTime.now();
-    }
 
     public Order(int id, User user) {
         this.id = id;
@@ -37,6 +29,10 @@ public class Order implements Comparable<Order>{
 
     public Set<Productik> getProducts(){
         return products.keySet().stream().collect(Collectors.toSet());
+    }
+
+    public Map<Productik, Double> getProductAmounts(){
+        return products;
     }
 
     public Order setProduct(Productik product, double number){
