@@ -1,7 +1,6 @@
 package ShopApp.Model;
 
 import java.util.Objects;
-import ShopApp.Model.ProductTools.*;
 
 public class UserProduct {
     private User user;

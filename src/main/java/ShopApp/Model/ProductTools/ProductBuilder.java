@@ -1,7 +1,7 @@
 package ShopApp.Model.ProductTools;
 
-import ShopApp.Model.IShop;
-import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.Productik;
+import ShopApp.Model.ShopUser;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -21,8 +21,8 @@ public class ProductBuilder {
         return instance;
     }
 
-    private static IShop shop;
-    public static void setShop(IShop shopchik){
+    private static ShopUser shop;
+    public static void setShop(ShopUser shopchik){
         shop = shopchik;
     }
 

@@ -1,10 +1,7 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.Model.IShop;
-import ShopApp.Model.Order;
-import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.*;
 import ShopApp.Model.ProductTools.ProductsFilter;
-import ShopApp.Model.User;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,10 +9,10 @@ import java.util.stream.Collectors;
 
 public class ChooseProductsScenario extends BaseConsoleScenario {
     private User user;
-    private IShop shop;
+    private ShopUser shop;
     private ProductsFilter filter;
 
-    public ChooseProductsScenario(User user, IShop shop) {
+    public ChooseProductsScenario(User user, ShopUser shop) {
         this.user = user;
         this.shop = shop;
     }
@@ -26,7 +23,7 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
         pressEnter();
 
         while (true) {
-            int answer = getAnswer("== Choose what to do:\n"
+            int answer = getAnswer("== Select action:\n"
                     + "1. Choose a product\n"
                     + "2. Order by popularity\n"
                     + "3. Order by rating\n"
@@ -39,7 +36,7 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
                     + "10. Show current order content\n"
                     + "11. Next to order finalization\n"
                     + "0. Back\n", 0, 11);
-            switch (answer){
+            switch (answer) {
                 case 1:
                     String productName = getAnswer("Write a product name:", true);
                     Productik product = shop.getProduct(productName);
@@ -84,7 +81,7 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
                     pressEnter();
                     break;
                 case 9:
-                    printKeywords();
+                    printAllKeywords();
                     pressEnter();
                     break;
                 case 10:
@@ -93,21 +90,23 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
                     break;
                 case 11:
                     printCurrentOrder();
-                    if (getAnswerYesNo("Confirm ordering (yes/no)?")){
-
+                    if (user.getCurrentOrder() == null) {
+                        if (getAnswerYesNo("Confirm ordering (yes/no)?")) {
+                            user.getCurrentOrder().setState(OrderState.PREPARING);
+                            return;
+                        }
                     }
-
+                    break;
                 case 0:
                     return;
-
             }
         }
     }
 
     private void printCurrentOrder() {
         Order order = user.getCurrentOrder();
-        if (order == null){
-            System.out.println("Текущий заказ пуст");
+        if (order == null) {
+            System.out.println("Current order is empty");
             return;
         }
         TreeSet<Productik> orderProducts = new TreeSet<>();
@@ -115,10 +114,11 @@ public class ChooseProductsScenario extends BaseConsoleScenario {
         this.printProducts(orderProducts, user);
     }
 
-    private void printKeywords() {
-        Set<String> keywords = shop.getProducts().stream().flatMap(x -> x.getKeywords().stream()).collect(Collectors.toSet());
-        System.out.println("== Ключевые слова:");
-        for (String keyword : keywords){
+    private void printAllKeywords() {
+//        Set<String> keywords = shop.getProducts().stream().flatMap(x -> x.getKeywords().stream()).collect(Collectors.toSet());
+        Set<String> keywords = shop.getKeywords();
+        System.out.println("== Keywords:");
+        for (String keyword : keywords) {
             System.out.println(keyword);
         }
     }

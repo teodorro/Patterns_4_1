@@ -2,9 +2,8 @@ package ShopApp.Model;
 
 import java.util.Map;
 import java.util.Set;
-import ShopApp.Model.ProductTools.*;
 
-public interface IShopSetData {
+public interface ShopSetData {
     void setUsers(Set<User> users);
     void setProducts(Set<Productik> products);
     void setOrders(Set<Order> orders);

@@ -2,22 +2,20 @@ package ShopApp.ConsoleScenarios;
 
 import ShopApp.Db.DtoConverter;
 import ShopApp.Db.ShopDbTest;
-import ShopApp.Model.IShop;
-import ShopApp.Model.IShopSetData;
+import ShopApp.Model.*;
 import ShopApp.Model.ProductTools.ProductBuilder;
-import ShopApp.Model.ShopImpl2;
-import ShopApp.Model.User;
 
 public class ConsoleScenario extends BaseConsoleScenario {
 
-    private IShop shop;
+    private ShopUser shop;
     private User user;
 
     public ConsoleScenario() {
         ShopDbTest db = new ShopDbTest().Initialize();
-        shop = new ShopImpl2();
+        shop = new Shop();
         ProductBuilder.setShop(shop);
-        new DtoConverter().convert(db, (IShopSetData)shop);
+        UserBuilder.setShop(shop);
+        new DtoConverter().convert(db, (ShopSetData)shop);
     }
 
     public void start() {
@@ -29,10 +27,10 @@ public class ConsoleScenario extends BaseConsoleScenario {
 
     public void showProductsOrders() {
         while (true) {
-            int answer = getAnswer("Выберите желаемое действие:\n"
-                    + "1. Выбрать товары\n"
-                    + "2. Посмотреть заказы\n"
-                    + "0. Выход", 0, 2);
+            int answer = getAnswer("== Select action:\n"
+                    + "1. Choose products\n"
+                    + "2. See orders\n"
+                    + "0. Exit", 0, 2);
             switch (answer) {
                 case 1:
                     (new ChooseProductsScenario(user, shop)).showProductsScenario();

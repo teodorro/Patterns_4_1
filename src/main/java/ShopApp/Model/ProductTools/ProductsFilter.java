@@ -4,6 +4,7 @@ import ShopApp.Model.ProductTools.Comparators.ProductIdComparator;
 import ShopApp.Model.ProductTools.Comparators.ProductPopularityComparator;
 import ShopApp.Model.ProductTools.Comparators.ProductRatingComparator;
 import ShopApp.Model.ProductTools.Comparators.ProductRecommendComparator;
+import ShopApp.Model.Productik;
 import ShopApp.Model.User;
 
 import java.util.HashSet;

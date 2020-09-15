@@ -1,6 +1,6 @@
 package ShopApp.Model.ProductTools.Comparators;
 
-import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.Productik;
 import ShopApp.Model.User;
 
 import java.util.Comparator;

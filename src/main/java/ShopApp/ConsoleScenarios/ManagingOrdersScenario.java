@@ -1,56 +1,54 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.Model.IShop;
-import ShopApp.Model.Order;
+import ShopApp.Model.*;
 import ShopApp.Model.ProductTools.Comparators.ProductIdComparator;
-import ShopApp.Model.ProductTools.*;
-import ShopApp.Model.User;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class ManagingOrdersScenario extends BaseConsoleScenario{
     private User user;
-    private IShop shop;
+    private ShopUser shop;
 
-    public ManagingOrdersScenario(User user, IShop shop) {
+    public ManagingOrdersScenario(User user, ShopUser shop) {
         this.user = user;
         this.shop = shop;
     }
 
     public void showOrdersScenario() {
         while (true) {
-            int answer = getAnswer("Выберите желаемое действие:\n"
-                    + "1. Посмотреть прошлые заказы\n"
-                    + "2. Посмотреть содержимое заказа\n"
-                    + "3. Отмена заказа\n"
-                    + "4. Возврат заказа\n"
-                    + "5. Повторение заказа\n"
-                    + "0. Выход", 0, 5);
+            int answer = getAnswer("== Select action:\n"
+                    + "1. See previous orders\n"
+                    + "2. See order content\n"
+                    + "3. Cancel order\n"
+                    + "4. Return order\n"
+                    + "5. Repeat order\n"
+                    + "0. Back", 0, 5);
             switch (answer) {
                 case 1:
                     showOrders();
                     pressEnter();
                     break;
                 case 2:
-                    int orderId = getAnswer("Введите id заказа:", 0, null);
+                    int orderId = getAnswer("Write order id:", 0, null);
                     TreeSet<Productik> products = new TreeSet<>(new ProductIdComparator());
                     products.addAll(shop.getOrder(orderId).getProducts());
                     printProducts(products, user);
                     break;
                 case 3:
-                    removeOrder(getAnswer("Введите id заказа:", 0, null));
+                    removeOrder(getAnswer("Write order id:", 0, null));
                     showOrders();
                     pressEnter();
                     break;
                 case 4:
-                    returnOrder(getAnswer("Введите id заказа:", 0, null));
+                    returnOrder(getAnswer("Write order id:", 0, null));
                     showOrders();
                     pressEnter();
                     break;
                 case 5:
-                    repeatOrder(getAnswer("Введите id заказа:", 0, null));
+                    repeatOrder(getAnswer("Write order id:", 0, null));
                     showOrders();
                     pressEnter();
                     break;
@@ -61,11 +59,25 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
     }
 
     private void returnOrder(int idOrder) {
-
+        Order order = shop.getOrder(idOrder);
+        if (order == null){
+            System.out.println("No order with this id");
+            return;
+        }
+        if (order.getState() != OrderState.DELIVERED){
+            System.out.println("This order cannot be returned");
+            return;
+        }
+        order.setState(OrderState.RETURNED);
     }
 
     private void repeatOrder(int idOrder) {
-
+        Order order = shop.getOrder(idOrder);
+        if (order == null){
+            System.out.println("No order with this id");
+            return;
+        }
+        shop.copy(idOrder);
     }
 
     private void removeOrder(int id) {
@@ -76,7 +88,7 @@ public class ManagingOrdersScenario extends BaseConsoleScenario{
         printOrders(shop.getOrders(user));
     }
 
-    private void printOrders(Set<Order> orders) {
+    private void printOrders(List<Order> orders) {
         int maxLengthId = Math.max(ID.length(), orders.stream().map(x -> x.getId()).max(Comparator.naturalOrder()).get().toString().length());
         int maxLengthTime = Math.max(LAST_TIME_MODIFIED.length(), orders.stream().map(x -> x.getLastTimeModified()).max(Comparator.naturalOrder()).get().toString().length());
         int maxLengthState = Math.max(STATE.length(), orders.stream().map(x -> x.getState().toString()).map(y -> y.length()).max(Comparator.naturalOrder()).get());

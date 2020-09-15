@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class InputProcessor {
     protected static Scanner scanner = new Scanner(System.in);
 
-    protected String getAnswer(String question, boolean notNullOrEmptyProhibited){
+    protected String getAnswer(String question, boolean nullOrEmptyProhibited){
         while (true) {
             System.out.println(question);
             String answer = scanner.nextLine();
-            if (notNullOrEmptyProhibited && (answer == null || answer.trim().isEmpty()))
+            if (nullOrEmptyProhibited && (answer == null || answer.trim().isEmpty()))
                 continue;
             return answer;
         }
@@ -24,12 +24,12 @@ public class InputProcessor {
 //                scanner.nextLine();
 //
 //                if (val < min || val > max){
-//                    System.out.println("Значение вне допустимого диапазона");
+//                    System.out.println("Value is out of bounds");
 //                    continue;
 //                }
 //                return val;
 //            } catch (Exception e) {
-//                System.out.println("Ошибка при вводе. Попробуйте еще раз");
+//                System.out.println("Input error. Try again");
 //                continue;
 //            }
 //        }
@@ -44,12 +44,12 @@ public class InputProcessor {
                 int val = scanner.nextInt();
                 scanner.nextLine();
                 if ((min != null && val < min) || (max != null && val > max)){
-                    System.out.println("Значение вне допустимого диапазона");
+                    System.out.println("Value is out of bounds");
                     continue;
                 }
                 return val;
             } catch (Exception e) {
-                System.out.println("Ошибка при вводе. Попробуйте еще раз");
+                System.out.println("Input error. Try again");
                 continue;
             }
         }
@@ -62,12 +62,12 @@ public class InputProcessor {
                 int val = scanner.nextInt();
                 scanner.nextLine();
                 if ((min != null && val < min) || (max != null && val > max)){
-                    System.out.println("Значение вне допустимого диапазона");
+                    System.out.println("Value is out of bounds");
                     continue;
                 }
                 return val;
             } catch (Exception e) {
-                System.out.println("Ошибка при вводе. Попробуйте еще раз");
+                System.out.println("Input error. Try again");
                 continue;
             }
         }
@@ -78,20 +78,20 @@ public class InputProcessor {
             try {
                 System.out.println(question);
                 String val = scanner.nextLine();
-                if ("да".equals(val))
+                if ("yes".equals(val))
                     return true;
-                if ("нет".equals(val))
+                if ("no".equals(val))
                     return false;
-                System.out.println("Значение вне допустимого диапазона");
+                System.out.println("Value is out of bounds");
             } catch (Exception e) {
-                System.out.println("Ошибка при вводе. Попробуйте еще раз");
+                System.out.println("Input error. Try again");
                 continue;
             }
         }
     }
 
     protected void pressEnter(){
-        System.out.println("Нажмите enter...");
+        System.out.println("Press enter...");
         scanner.nextLine();
     }
 }

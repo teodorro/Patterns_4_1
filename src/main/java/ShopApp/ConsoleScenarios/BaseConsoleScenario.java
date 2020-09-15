@@ -1,7 +1,7 @@
 package ShopApp.ConsoleScenarios;
 
 
-import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.Productik;
 import ShopApp.Model.User;
 
 import java.text.DecimalFormat;

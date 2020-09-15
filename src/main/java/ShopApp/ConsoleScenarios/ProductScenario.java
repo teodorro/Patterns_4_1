@@ -1,8 +1,9 @@
 package ShopApp.ConsoleScenarios;
 
-import ShopApp.Model.IShop;
-import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.Productik;
+import ShopApp.Model.ShopUser;
 import ShopApp.Model.User;
+import ShopApp.Model.UserProduct;
 
 public class ProductScenario extends BaseConsoleScenario {
     private final String NAME = "Name";
@@ -10,11 +11,11 @@ public class ProductScenario extends BaseConsoleScenario {
     private final String PRODUCER = "Producer";
     private final String RATING = "Rating";
     private final String KEYWORDS = "Keywords";
-    private IShop shop;
+    private ShopUser shop;
     private User user;
     private Productik product;
 
-    public ProductScenario(User user, IShop shop, Productik product) {
+    public ProductScenario(User user, ShopUser shop, Productik product) {
         this.user = user;
         this.shop = shop;
         this.product = product;
@@ -23,25 +24,40 @@ public class ProductScenario extends BaseConsoleScenario {
     public void showScenario(){
         showProductInfo(user);
         while (true) {
-            int answer = getAnswer("Выберите желаемое действие:\n"
-                    + "1. Добавить продукт в заказ\n"
-                    + "2. Поставить товару оценку\n"
-                    + "3. Отменить оценку товара\n"
-                    + "0. Вернуться назад", 0, 3);
+            int answer = getAnswer("== Select action:\n"
+                    + "1. Add product to order\n"
+                    + "2. Set rating\n"
+                    + "3. Cancel rating\n"
+                    + "0. Back", 0, 3);
             switch (answer) {
                 case 1:
-                    Double quantity = getAnswer("Укажите количество продукта:", 0d, Double.MAX_VALUE);
-                    user.getCurrentOrder().setProduct(product, quantity);
-                    System.out.println("Товар добавлен в заказ");
+                    addProductToOrder();
                     break;
                 case 2:
+                    setRating();
                     break;
                 case 3:
+                    cancelRating();
                     break;
                 case 0:
                     return;
             }
         }
+    }
+
+    private void cancelRating() {
+        shop.setRating(new UserProduct(user, product), null);
+    }
+
+    private void setRating() {
+        Double rating = getAnswer("Write rating value (1-5):", 1d, 5d);
+        shop.setRating(new UserProduct(user, product), rating);
+    }
+
+    private void addProductToOrder() {
+        Double quantity = getAnswer("Write amount of product:", 0d, Double.MAX_VALUE);
+        user.getCurrentOrder().setProduct(product, quantity);
+        System.out.println("Product added");
     }
 
     private void showProductInfo(User user)

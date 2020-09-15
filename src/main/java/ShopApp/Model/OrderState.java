@@ -2,7 +2,7 @@ package ShopApp.Model;
 
 public enum OrderState {
     CONSTRUCTING,
-    DELIVERING,
+    PREPARING,
     DELIVERED,
     RETURNED
 }

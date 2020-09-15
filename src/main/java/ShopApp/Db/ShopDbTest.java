@@ -1,8 +1,6 @@
 package ShopApp.Db;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class ShopDbTest implements IShopDb{
@@ -14,7 +12,7 @@ public class ShopDbTest implements IShopDb{
 
 
     public ShopDbTest Initialize(){
-        (new ShopDbNewGenerator()).generate(this);
+        (new ShopDbGenerator()).generate(this);
         return this;
     }
 

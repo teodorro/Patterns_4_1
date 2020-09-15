@@ -1,11 +1,7 @@
 package ShopApp.Db;
 
-import ShopApp.Model.IShopSetData;
-import ShopApp.Model.Order;
+import ShopApp.Model.*;
 import ShopApp.Model.ProductTools.ProductBuilder;
-import ShopApp.Model.ProductTools.*;
-import ShopApp.Model.User;
-import ShopApp.Model.UserProduct;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class DtoConverter {
 
-    public void convert(IShopDb db, IShopSetData shop) {
+    public void convert(IShopDb db, ShopSetData shop) {
         Set<User> users = getUsers(db);
         Set<Productik> products = getProducts(db);
         Set<Order> orders = getOrders(db, users, products);
@@ -68,11 +64,8 @@ public class DtoConverter {
                 orderContent.put(product, dto.getProducts().get(idProduct));
             }
 
-            Order order = null;
+            Order order = new Order(dto.getId(), user);
             for (Productik product : orderContent.keySet()){
-                if (order == null){
-                    order = new Order(dto.getId(), user, product, orderContent.get(product));
-                }
                 order.setProduct(product, orderContent.get(product));
             }
             orders.add(order);
@@ -90,6 +83,8 @@ public class DtoConverter {
             Productik product = ProductBuilder.getInstance()
                     .setName(dto.getName()).setPrice(dto.getPrice()).setProducer(dto.getProducer()).addKeywords(keywords)
                     .build();
+            for (int i = 0; i < dto.getNumberSells(); i++)
+                product.addSell();
             products.add(product);
         }
         return products;

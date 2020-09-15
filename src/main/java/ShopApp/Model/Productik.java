@@ -1,4 +1,4 @@
-package ShopApp.Model.ProductTools;
+package ShopApp.Model;
 
 import ShopApp.Model.User;
 import ShopApp.Model.UserProduct;
@@ -44,7 +44,9 @@ public class Productik {
         return numberSells;
     }
 
-    public Double getRating(User user) { return ratingGetter.apply(new UserProduct(user, this)); }
+    public Double getRating(User user) {
+        return ratingGetter.apply(new UserProduct(user, this));
+    }
 
     public Double getRatingZeroFromNull2(User user) {
         return ratingGetter.apply(new UserProduct(user, this)) == null

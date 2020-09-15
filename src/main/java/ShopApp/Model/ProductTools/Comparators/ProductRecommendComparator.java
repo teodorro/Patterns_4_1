@@ -1,6 +1,6 @@
 package ShopApp.Model.ProductTools.Comparators;
 
-import ShopApp.Model.ProductTools.*;
+import ShopApp.Model.Productik;
 import ShopApp.Model.User;
 
 import java.util.*;
@@ -16,8 +16,6 @@ public class ProductRecommendComparator implements Comparator<Productik> {
         Map<User, Double> mapUserCloseness = calcUserCloseness(user, otherUsers);
         Map<Productik, Map<User, Double>> productUserDoubleMap = getProductUserDoubleMap(user, otherUsers);
         recommendedList = createRecommendedList(mapUserCloseness, productUserDoubleMap);
-//        Map<User, Map<Productik, Double>> mapUserProductCloseness = calcMapUserProductCloseness(user, mapUserCloseness);
-//        recommendedList = getSingleClosenessesList(mapUserProductCloseness);
         return this;
     }
 
@@ -31,12 +29,6 @@ public class ProductRecommendComparator implements Comparator<Productik> {
             double closeness = differences.stream().reduce(0d, (x, y) -> x + y) / differences.size();
             closenesses.put(anotherUser, closeness);
         }
-//        Double max = closenesses.values().stream().max(Comparator.naturalOrder()).get();
-//        for (User u : closenesses.keySet())
-//            closenesses.put(u, closenesses.get(u) / max);
-
-//        for (User u : closenesses.keySet())
-//            closenesses.put(u, closenesses.get(u) / MAX_RATING);
 
         return closenesses;
     }
@@ -76,71 +68,6 @@ public class ProductRecommendComparator implements Comparator<Productik> {
         return entriesSortedByValues(recommended);
     }
 
-//    private Map<User, Map<Productik, Double>> getMapUserProductRate(User user, Map<User, Double> mapUserCloseness) {
-//        Map<User, Map<Productik, Double>> closenesses = new HashMap<>();
-//        for (User anotherUser : mapUserCloseness.keySet()){
-//            Set<Productik> products = anotherUser.getRatings().keySet().stream().filter(x -> !user.getRatings().containsKey(x)).collect(Collectors.toSet());
-//            Map<Productik, Double> closeness = products.stream().collect(Collectors.toMap(
-//                    x -> x,
-//                    x -> (anotherUser.getRatings().get(x))
-//            ));
-//            closenesses.put(anotherUser, closeness);
-//        }
-//        return closenesses;
-//    }
-//
-//    private SortedSet<Map.Entry<Productik, Double>> getSingleClosenessesList(Map<User, Map<Productik, Double>> mapUserProductRate){
-//        HashMap<Productik, Set<Double>> singleSetList = new HashMap<>();
-//        for (User anotherUser : mapUserProductRate.keySet()) {
-//            Map<Productik, Double> closeness = mapUserProductRate.get(anotherUser);
-//            for (Productik product : closeness.keySet()) {
-//                if (!singleSetList.containsKey(product))
-//                    singleSetList.put(product, new HashSet<>());
-//                singleSetList.get(product).add(closeness.get(product));
-//            }
-//        }
-//        HashMap<Productik, Double> singleList = new HashMap<>();
-//        for (Productik product : singleSetList.keySet()){
-//            singleList.put(product, singleSetList.get(product).stream().reduce((x, y) -> x + y).get() / singleSetList.get(product).size());
-//        }
-//        return entriesSortedByValues(singleList);
-//    }
-
-
-
-//    private Map<User, Map<Productik, Double>> calcMapUserProductCloseness(User user, Map<User, Double> mapUserCloseness){
-//        Map<User, Map<Productik, Double>> closenesses = new HashMap<>();
-//        for (User anotherUser : mapUserCloseness.keySet()){
-////            Set<Productik> products = user.getRatings().keySet().stream().filter(x -> anotherUser.getRatings().containsKey(x)).collect(Collectors.toSet());
-//            Set<Productik> products = anotherUser.getRatings().keySet().stream().filter(x -> !user.getRatings().containsKey(x)).collect(Collectors.toSet());
-////            Map<Productik, Double> closeness = products.stream().collect(Collectors.toMap(
-////                    x -> x,
-////                    x -> (Math.abs(user.getRatings().get(x) - anotherUser.getRatings().get(x))) * mapUserCloseness.get(anotherUser)
-////            ));
-//            Map<Productik, Double> closeness = products.stream().collect(Collectors.toMap(
-//                    x -> x,
-//                    x -> (anotherUser.getRatings().get(x)) * mapUserCloseness.get(anotherUser)
-//            ));
-//            closenesses.put(anotherUser, closeness);
-//        }
-//        return closenesses;
-//    }
-
-//    private SortedSet<Map.Entry<Productik, Double>> getSingleClosenessesList(Map<User, Map<Productik, Double>> mapUserProductCloseness){
-//        HashMap<Productik, Double> singleList = new HashMap<>();
-//        for (User anotherUser : mapUserProductCloseness.keySet()) {
-//            Map<Productik, Double> closeness = mapUserProductCloseness.get(anotherUser);
-//            for (Productik product : closeness.keySet()) {
-//                if (singleList.containsKey(product)) {
-//                    if (singleList.get(product) < closeness.get(product))
-//                        singleList.put(product, closeness.get(product));
-//                } else
-//                    singleList.put(product, closeness.get(product));
-//            }
-//        }
-//        return entriesSortedByValues(singleList);
-//    }
-
     static <K,V extends Comparable<? super V>>
     SortedSet<Map.Entry<K,V>> entriesSortedByValues(Map<K,V> map) {
         SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<Map.Entry<K,V>>(
@@ -161,10 +88,6 @@ public class ProductRecommendComparator implements Comparator<Productik> {
         Optional<Map.Entry<Productik, Double>> b1 = recommendedList.stream().filter(x -> x.getKey() == product1).findFirst();
         Optional<Map.Entry<Productik, Double>> b2 = recommendedList.stream().filter(x -> x.getKey() == product2).findFirst();
 
-//        Map.Entry<Productik, Double> entry1 = recommendedList.stream().filter(x -> x.getKey() == product1) != null ? recommendedList.stream().filter(x -> x.getKey() == product1).findFirst().get() : null;
-//        Map.Entry<Productik, Double> entry2 = recommendedList.stream().filter(x -> x.getKey() == product2) != null ? recommendedList.stream().filter(x -> x.getKey() == product2).findFirst().get() : null;
-//        if (b1.isEmpty() && b2.isEmpty())
-//            return Integer.MIN_VALUE;
         int a1 = !b1.isEmpty() ? recommendedList.tailSet(b1.get()).size() : Integer.MIN_VALUE;
         int a2 = !b2.isEmpty() ? recommendedList.tailSet(b2.get()).size() : Integer.MIN_VALUE;
         return a1 - a2;

@@ -1,8 +1,8 @@
 package ShopApp.Model;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
-import ShopApp.Model.ProductTools.*;
 
 public class User {
     private final String login;
@@ -10,8 +10,8 @@ public class User {
     private String name;
 
     private Supplier<Map<Productik, Double>> ratingGetter;
-    private List<Order> orders = new ArrayList<>();
-    private List<Order> returnedOrders = new ArrayList<>();
+    private Supplier<List<Order>> orderGetter;
+    private Consumer<Order> orderAdder;
     private Order currentOrder;
 
     public User(String login, String password, String name) {
@@ -37,15 +37,23 @@ public class User {
 }
 
     public List<Order> getOrders() {
-        return orders;
+        return orderGetter.get();
     }
 
-    public List<Order> getReturnedOrders() {
-        return returnedOrders;
+    public void addOrder(Order order){
+        orderAdder.accept(order);
     }
 
     public void setRatingGetter(Supplier<Map<Productik, Double>> ratingGetter){
         this.ratingGetter = ratingGetter;
+    }
+
+    public void setOrderGetter(Supplier<List<Order>> orderGetter){
+        this.orderGetter = orderGetter;
+    }
+
+    public void setOrderAdder(Consumer<Order> orderAdder){
+        this.orderAdder = orderAdder;
     }
 
     public Order getCurrentOrder() {
@@ -54,6 +62,11 @@ public class User {
 
     public void setCurrentOrder(Order currentOrder) {
         this.currentOrder = currentOrder;
+    }
+
+    public void setStartCurrentOrder(){
+        currentOrder.setState(OrderState.PREPARING);
+
     }
 
     @Override
