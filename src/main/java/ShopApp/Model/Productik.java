@@ -56,9 +56,11 @@ public class Productik implements Comparable<Productik>{
     }
 
     public Double getRatingZeroFromNull2(User user) {
-        return ratingSetByUserGetter.apply(new UserProduct(user, this)) == null
-                ? 0d
-                : ratingSetByUserGetter.apply(new UserProduct(user, this));
+        Double r = getRatingSetByUser(user);
+        if (r != null)
+            return ratingSetByUserGetter.apply(new UserProduct(user, this));
+        r = getAvgRating();
+        return r != null ? r : 0d;
     }
 
     public void setProducer(String producer) {
